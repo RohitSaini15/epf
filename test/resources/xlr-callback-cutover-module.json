@@ -1,0 +1,10 @@
+{
+  "artifact":"https://artifactory-dev.express-scripts.com/artifactory/deb-local/pool/main/c/cnp-package-deb/cnp-package-deb-0.0.4.deb",
+  "env":"prod",
+  "platform":"aws",
+  "Release_rollbackDeploymentPackagePath": "https://artifactory-dev.express-scripts.com/artifactory/deb-local/pool/main/c/cnp-package-deb/cnp-package-deb-0.0.3.deb",
+  "Release_BuildUri": "https://cbc.express-scripts.com/T01/builds/foo/2",
+  "Release_JenkinsMaster": "https://cbc.express-scripts.com/T01",
+  "repoUrl": "https://git.express-scripts.com/expressScripts/fakerepo",
+  "branchName": "develop"
+}

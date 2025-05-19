@@ -1,0 +1,23 @@
+---
+version: 1.0.8
+productData:
+  serviceName: enterprise-pipeline-framework
+  businessApplicationID: BA18522
+  applicationServiceID: AS050568
+  securityReviewID: ASAQ-731567
+deliveryTeam:
+  primaryOwner: C46043
+  backupOwner: C71921
+jenkinsOrchestratorNamespace: epf
+globalGroups:
+  admin: internal.G_PIPELINE_APPROVERS
+  devops: accounts.G_PIPELINE_APPROVERS
+  developer: internal.G_PIPELINE_DEVELOPERS
+adjudicator:
+  goals:
+    - Base
+sonarQube:
+  profile: cigna
+checkmarx:
+  teamName: enterprise-pipeline-framework
+  poc: False

@@ -1,0 +1,1307 @@
+{
+  "artifact": "[https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom, https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar]",
+  "releaseId": "",
+  "steps": [
+    {
+      "arguments": {
+        "appName": "devops-testapps-SpringPcf-prod-1-candidate",
+        "artifact": "~DEFERRED|2|publishUrl~",
+        "foundation": "ps2pcf02",
+        "organization": "PipelineAutomation",
+        "space": "production",
+        "monitoringSolution": "newrelic",
+        "autoscale": false
+      },
+      "buildSchedule": "PRERELEASE_BUILD",
+      "verb": "deploy",
+      "order": 12,
+      "completed": false,
+      "podIndex": 0,
+      "options": {
+        "env": "prod-02",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "arguments": {
+        "configDir": "qa",
+        "platform": "OpenShift",
+        "cluster": "hs-1-nonprod",
+        "imageName": "~DEFERRED|5|imageName~",
+        "imageTag": "~DEFERRED|5|tagName~",
+        "appName": "springpcf-testapp-1-qa",
+        "monitoringSolution": "newrelic",
+        "cmdbApplicationServiceNumber": "AS025707",
+        "namespace": "pipeline-automation-qa"
+      },
+      "buildSchedule": "PRERELEASE_BUILD",
+      "verb": "deploy",
+      "order": 13,
+      "completed": false,
+      "podIndex": 0,
+      "options": {
+        "env": "qa",
+        "filter": "cnp-deploy-argorollouts"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "arguments": {
+        "appName": "devops-testapps-SpringPcf-prod-1-candidate",
+        "foundation": "ps2pcf02",
+        "organization": "PipelineAutomation",
+        "space": "production"
+      },
+      "buildSchedule": "CALLBACK_BUILD",
+      "verb": "cutover",
+      "order": 15,
+      "completed": false,
+      "podIndex": 0,
+      "options": {
+        "env": "prod-02",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "arguments": {
+        "configDir": "qa",
+        "platform": "OpenShift",
+        "cluster": "hs-1-nonprod",
+        "appName": "springpcf-testapp-1-qa",
+        "namespace": "pipeline-automation-qa"
+      },
+      "buildSchedule": "CALLBACK_BUILD",
+      "verb": "cutover",
+      "order": 16,
+      "completed": false,
+      "podIndex": 0,
+      "options": {
+        "env": "qa",
+        "filter": "cnp-deploy-argorollouts"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "arguments": {
+
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "release",
+      "order": 17,
+      "completed": null,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-release-xlr"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "arguments": null,
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "preflightCheckVerification",
+      "order": 1,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-preflight-check-codeowners"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+          ""
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "buildGoals": "clean install -B",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "build",
+      "order": 2,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-build-publish-maven-create"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+          "rollbackUrl": [
+            ""
+          ],
+          "publishUrl": [
+            "https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom",
+            "https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar"
+          ]
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "cxPreset": 36,
+        "cxGroupId": "de73af4d-b5b7-4436-beb3-0df6b536a1ad",
+        "cxProjectName": "devops-testapps-springpcf",
+        "cxIncremental": true,
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "runSecurityScan",
+      "order": 3,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-quality-profile-checkmarx"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "projectName": "devops-testapps-SpringPcf",
+        "applicationType": "maven",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "runQualityCheck",
+      "order": 4,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-quality-check-sonarqube"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "pomPath": "pom.xml",
+        "generateDockerFile": true,
+        "org": "cnp",
+        "appendCommitIdToTag": true,
+        "skipBuildIfExists": true,
+        "artifact": "[https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom, https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar]",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "buildImage",
+      "order": 5,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-build-image"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+          "imageName": "cnp/devops-testapps-springpcf",
+          "repository": "cnp/devops-testapps-springpcf",
+          "tagName": "1.3.42_a0b503ab16b2f6ba652013a59d78dca84d8cf8b6",
+          "publishUrl": "cnp/devops-testapps-springpcf:1.3.42_a0b503ab16b2f6ba652013a59d78dca84d8cf8b6",
+          "skipped": "false"
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "appName": "devops-testapps-SpringPcf-dev-1-candidate",
+        "artifact": "[https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom, https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar]",
+        "foundation": "ch3pcf04",
+        "organization": "PipelineAutomation",
+        "space": "development",
+        "monitoringSolution": "newrelic",
+        "asn": "AS025707",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "deploy",
+      "order": 6,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "DEV",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "organization": "PipelineAutomation",
+        "appName": "devops-testapps-SpringPcf-dev-1-candidate",
+        "foundation": "ch3pcf04",
+        "space": "development",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "cutover",
+      "order": 7,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "dev",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "appName": "devops-testapps-SpringPcf-qa-1-candidate",
+        "artifact": "[https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom, https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar]",
+        "foundation": "ch3pcf01",
+        "organization": "PipelineAutomation",
+        "space": "QA",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "deploy",
+      "order": 8,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "qa",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "organization": "PipelineAutomation",
+        "appName": "devops-testapps-SpringPcf-qa-1-candidate",
+        "foundation": "ch3pcf01",
+        "space": "QA",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "cutover",
+      "order": 9,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "qa",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "configDir": "dev",
+        "platform": "OpenShift",
+        "cluster": "hs-1-nonprod",
+        "imageName": "cnp/devops-testapps-springpcf",
+        "imageTag": "1.3.42_a0b503ab16b2f6ba652013a59d78dca84d8cf8b6",
+        "appName": "springpcf-testapp-1-dev",
+        "namespace": "pipeline-automation",
+        "monitoringSolution": "newrelic",
+        "cmdbApplicationServiceNumber": "AS025707",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "deploy",
+      "order": 10,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "dev",
+        "filter": "cnp-deploy-argorollouts"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+        "configDir": "dev",
+        "platform": "OpenShift",
+        "cluster": "hs-1-nonprod",
+        "appName": "springpcf-testapp-1-dev",
+        "namespace": "pipeline-automation",
+        "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+        "branchName": "release/test-wright",
+        "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6"
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "cutover",
+      "order": 11,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "env": "dev",
+        "filter": "cnp-deploy-argorollouts"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    },
+    {
+      "arguments": {
+
+      },
+      "buildSchedule": "CURRENT_BUILD",
+      "verb": "preRelease",
+      "order": 14,
+      "completed": true,
+      "podIndex": 0,
+      "options": {
+        "filter": "cnp-release-xlr"
+      },
+      "retryCount": 1,
+      "result": {
+        "commandResult": "SUCCESS",
+        "errors": [
+
+        ],
+        "commandOutput": {
+
+        },
+        "subSteps": 0
+      }
+    }
+  ],
+  "deploymentPackagePath": "ci-snapshot-local/Cloud%20Native%20Pipeline/devops-testapps-SpringPcf/deploymentPackage_devops-testapps-SpringPcf_1.3.42.zip",
+  "buildConfiguration": {
+    "debPublicMirror": "https://artifactory.express-scripts.com/artifactory/deb-virtual",
+    "imageValidationEnabled": true,
+    "defaultDojoMsgImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-dojo-messenger:latest",
+    "releaseStashPattern": "*manifest.y*l,release.info,package.json,pom.xml,Dockerfile,deployment*/**/**",
+    "enableExternalConfiguration": false,
+    "ignoreConftestAnalysisFailure": true,
+    "dockerRegistry": "registry.cigna.com",
+    "dojoMsgEndpoint": "debug",
+    "podSecurityContextPrivileged": true,
+    "podSecurityContextRunas": "0",
+    "podImagePullPolicy": "Always",
+    "awsIdpProvider": "Okta",
+    "defaultAwsImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-aws:latest",
+    "releaseInfoFileName": "releaseInfo.json",
+    "defaultTerraformImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-terraform:1.0.0-dev-ov2",
+    "imageValidationModuleCommand": "cnp-validate-images.sh",
+    "debLocal": "deb-local",
+    "candidateJob": "Cloud%20Native%20Pipeline/job/RND/job/CandidateDeployer",
+    "defaultGoImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-go:latest",
+    "enableEvents": true,
+    "disableAllTests": false,
+    "disableAlerts": false,
+    "enableResourceRequests": true,
+    "imageValidationModuleName": "cnp-validate-images",
+    "logLevel": "INFO",
+    "debPrivate": "https://artifactory.express-scripts.com/artifactory/deb-local",
+    "podWorkingDir": "/home/jenkins/agent",
+    "callbackJobBase": "job/DevOps/job/ProductionDeployment/job/CNP/job/XLR%20Callback%20Handler",
+    "jenkinsDollarHackEnabled": true,
+    "dockerDevRegistry": "registry-dev.cigna.com",
+    "defaultJavaImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest",
+    "defaultDockerImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+    "debVirtual": "deb-virtual",
+    "defaultPcfImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-pcf:latest",
+    "imageRepo": "docker-dev.artifactory.express-scripts.com",
+    "podNodeSelector": "beta.kubernetes.io/os: \"linux\"",
+    "callbackJob": "https://cbc.express-scripts.com/t01/job/Cloud%20Native%20Pipeline/job/RND/job/XLR%20Callback%20Handler",
+    "xlrTemplateUrl": "https://xlrelease.express-scripts.com/api/v1/templates/Applications/templates/Folder5e579b80ae5e4669952e21ea480a380a/Release55e5fd2e398740269e4b933a3f2cd532/start",
+    "podCommand": "[\"/bin/sh\",\"-c\"]",
+    "simulateOnly": false,
+    "defaultK8sImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest",
+    "defaultInitImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-init:latest",
+    "overrideCommon": false,
+    "defaultNpmImage": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-node10:latest",
+    "podIdleMinutes": "1",
+    "podCommandArgs": "cat",
+    "deployableBranches": "release/test-wright"
+  },
+  "releaseArguments": {
+    "repoUrl": "https://git.express-scripts.com/ExpressScripts/devops-testapps-SpringPcf.git",
+    "branchName": "release/test-wright",
+    "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6",
+    "artifact": "[https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.pom, https://artifactory.express-scripts.com/artifactory/libs-release-local/com/esrx/devops-testapps-SpringPcf/1.3.42/devops-testapps-SpringPcf-1.3.42.jar]"
+  },
+  "moduleContractList": [
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cloudnativepipeline",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-jenkins-job-build.sh",
+      "unStashName": "",
+      "contractName": "TEST",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-jenkins-job-build",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "build",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-jenkins-job-build-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-build-publish-maven-create.sh",
+      "unStashName": "",
+      "contractName": "BUILD",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-build-publish-maven-create",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "build",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-build-publish-maven-create-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cnp_cnp_robot_registry_prod",
+          "scope": "",
+          "prefix": "PROD"
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cnp_cnp_robot_registry_de",
+          "scope": "",
+          "prefix": ""
+        },
+
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnptools",
+      "unStashName": "",
+      "contractName": "PUBLISH_IMAGE",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-publish-image",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "publishimage",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-publish-image-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "d2d7833b-38fc-405a-b1b5-4f573ac788a6",
+          "scope": "",
+          "prefix": "CX"
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-quality-profile-checkmarx.sh",
+      "unStashName": "",
+      "contractName": "SECURITY_SCAN",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-quality-profile-checkmarx",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "scan",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-quality-profile-checkmarx-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cnp_cnp_robot_registry_de",
+          "scope": "",
+          "prefix": ""
+        },
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnptools",
+      "unStashName": "",
+      "contractName": "CONTAINER",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-build-image",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "buildimage",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-build-image-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "dev",
+          "type": "usernamePassword",
+          "id": "cnp-nonprod-oc",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "qa",
+          "type": "usernamePassword",
+          "id": "cnp-nonprod-oc",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cigna_git_cnp",
+          "scope": "",
+          "prefix": "GIT"
+        },
+        {
+          "env": "dev",
+          "type": "string",
+          "id": "cnp-nonprod-argocd",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "qa",
+          "type": "string",
+          "id": "cnp-pa-qa-argocd-token",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-argorollouts.sh",
+      "unStashName": "releaseStash",
+      "contractName": "DEPLOY",
+      "stageName": "OpenShift",
+      "excludesPattern": "",
+      "moduleName": "cnp-deploy-argorollouts",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": "deployCompleted",
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest",
+      "requireCheckout": false,
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "container",
+      "subCommand": "deploy",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-deploy-argorollouts-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "dev",
+          "type": "usernamePassword",
+          "id": "cnp-nonprod-oc",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "qa",
+          "type": "usernamePassword",
+          "id": "cnp-nonprod-oc",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-argorollouts.sh",
+      "unStashName": "",
+      "contractName": "CUTOVER",
+      "stageName": "OpenShift",
+      "excludesPattern": "",
+      "moduleName": "cnp-deploy-argorollouts",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": "cutoverCompleted",
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "promote",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-deploy-argorollouts-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "xlRelease",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": "ARTIFACTORY"
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "81fbd2fe-c892-472c-9a20-6a327b2960d3",
+          "scope": "",
+          "prefix": "GIT"
+        }
+      ],
+      "requests": {
+        "memory": 50
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-xlr.sh",
+      "unStashName": "releaseStash",
+      "contractName": "RELEASE",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-release-xlr",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": true,
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "release",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-release-xlr-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "dev",
+          "type": "usernamePassword",
+          "id": "CH3PCF04 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "qa",
+          "type": "usernamePassword",
+          "id": "CH3PCF01 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "prod-02",
+          "type": "usernamePassword",
+          "id": "PS2PCF02 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "string",
+          "id": "NEWRELIC_API_KEY_NONPROD",
+          "scope": "",
+          "prefix": "NR_NONPROD"
+        },
+        {
+          "env": "",
+          "type": "string",
+          "id": "NEWRELIC_API_KEY_PROD",
+          "scope": "",
+          "prefix": "NR_PROD"
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-pcf.sh",
+      "unStashName": "releaseStash",
+      "contractName": "DEPLOY",
+      "stageName": "PCF",
+      "excludesPattern": "",
+      "moduleName": "cnp-deploy-pcf",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": "deployCompleted",
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-pcf:latest",
+      "requireCheckout": false,
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "deploy",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-deploy-pcf-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "dev",
+          "type": "usernamePassword",
+          "id": "CH3PCF04 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "qa",
+          "type": "usernamePassword",
+          "id": "CH3PCF01 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "prod-02",
+          "type": "usernamePassword",
+          "id": "PS2PCF02 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "string",
+          "id": "NEWRELIC_API_KEY_NONPROD",
+          "scope": "",
+          "prefix": "NR_NONPROD"
+        },
+        {
+          "env": "",
+          "type": "string",
+          "id": "NEWRELIC_API_KEY_PROD",
+          "scope": "",
+          "prefix": "NR_PROD"
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-pcf.sh",
+      "unStashName": "releaseStash",
+      "contractName": "CUTOVER",
+      "stageName": "PCF",
+      "excludesPattern": "",
+      "moduleName": "cnp-deploy-pcf",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": "cutoverCompleted",
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-pcf:latest",
+      "requireCheckout": false,
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "cutover",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-deploy-pcf-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "string",
+          "id": "sonar",
+          "scope": "",
+          "prefix": "SQ"
+        }
+      ],
+      "requests": {
+
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-quality-check-sonarqube.sh",
+      "unStashName": "",
+      "contractName": "QUALITY_CHECK",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-quality-check-sonarqube",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "scan",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-quality-check-sonarqube-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "string",
+          "id": "GIT_TOKEN",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+        "memory": 20
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-preflight-check-git-settings.sh",
+      "unStashName": "",
+      "contractName": "PREFLIGHT_CHECK",
+      "stageName": "Verify Branch Rules",
+      "excludesPattern": "",
+      "moduleName": "cnp-preflight-check-git-settings",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-preflight-check-git-settings-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": null,
+      "requests": {
+        "memory": 20
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-preflight-check-codeowners.sh",
+      "unStashName": "",
+      "contractName": "PREFLIGHT_CHECK",
+      "stageName": "Verify CODEOWNERS",
+      "excludesPattern": "",
+      "moduleName": "cnp-preflight-check-codeowners",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-preflight-check-codeowners-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": "AF"
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "81fbd2fe-c892-472c-9a20-6a327b2960d3",
+          "scope": "",
+          "prefix": "GIT"
+        }
+      ],
+      "requests": {
+        "memory": 50
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-xlr.sh",
+      "unStashName": "",
+      "contractName": "FINALIZE_RELEASE",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-release-xlr",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "finalize",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-release-xlr-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "requests": {
+        "memory": 50
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-util.sh",
+      "unStashName": "releaseStash",
+      "contractName": "PIPELINE_STATE_WRITER",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-release-util",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "publish",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-release-util-results.json",
+      "stashName": ""
+    },
+    {
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "81fbd2fe-c892-472c-9a20-6a327b2960d3",
+          "scope": "",
+          "prefix": "GIT"
+        }
+      ],
+      "requests": {
+        "memory": 50
+      },
+      "useLogFile": false,
+      "requiresStash": true,
+      "commandName": "cnp-release-util.sh",
+      "unStashName": "",
+      "contractName": "RETRIEVE",
+      "stageName": null,
+      "excludesPattern": "",
+      "moduleName": "cnp-release-util",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest",
+      "requireCheckout": false,
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "retrieve",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-release-util-results.json",
+      "stashName": "release-stash"
+    }
+  ],
+  "buildInfo": {
+    "branchName": "release/test-wright",
+    "buildDescription": null,
+    "jenkinsfileDirectory": ".",
+    "buildTargetFile": null,
+    "buildGoals": null,
+    "xlReleaseUrl": null,
+    "gitCredential": null,
+    "xlTemplateName": null,
+    "nodeName": null,
+    "jobUrl": "https://cbc.express-scripts.com/t01/job/Cloud%20Native%20Pipeline/job/Functional%20Test%20Apps/job/zz-generated/job/e2e-release-springpcf-all-rnd/job/release%252Ftest-wright/",
+    "commitId": "a0b503ab16b2f6ba652013a59d78dca84d8cf8b6",
+    "mavenOpts": null,
+    "artifactorySnapshotRepo": "libs-snapshot-local",
+    "commitMessage": null,
+    "artifactoryYumRepo": "yum-local",
+    "buildType": "Cloud Native Modular Build",
+    "buildTag": "jenkins-Cloud Native Pipeline-Functional Test Apps-zz-generated-e2e-release-springpcf-all-rnd-release%2Ftest-wright-31",
+    "buildName": "jenkins-Cloud Native Pipeline-Functional Test Apps-zz-generated-e2e-release-springpcf-all-rnd-release%2Ftest-wright-31",
+    "artifactoryDeploymentReleaseRepo": "ci-release-local",
+    "commitAuthorName": null,
+    "enterpriseReleaseId": null,
+    "artifactoryCredential": "cbc/artifactory",
+    "npmCredentialsId": null,
+    "cloudNativePipelineModuleConfiguration": "------ Module Configuration ------ \n\n\n---- cnp-jenkins-job-build ----\nCONTRACT: TEST\nCOMMAND: cnp-jenkins-job-build.sh\nSUBCOMMAND: build\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cloudnativepipeline\"}]\n\n---- cnp-build-publish-maven-create ----\nCONTRACT: BUILD\nCOMMAND: cnp-build-publish-maven-create.sh\nSUBCOMMAND: build\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\"}]\n\n---- cnp-publish-image ----\nCONTRACT: PUBLISH_IMAGE\nCOMMAND: cnptools\nSUBCOMMAND: publishimage\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cnp_cnp_robot_registry_prod\", \"prefix\":\"PROD\"}, {\"type\":\"usernamePassword\", \"id\":\"cnp_cnp_robot_registry_de\"}, {\"type\":\"string\", \"id\":\"CNP_QUAY_SIGN_TOKEN_CRED\", \"prefix\":\"QUAYCLI\"}]\n\n---- cnp-quality-profile-checkmarx ----\nCONTRACT: SECURITY_SCAN\nCOMMAND: cnp-quality-profile-checkmarx.sh\nSUBCOMMAND: scan\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"d2d7833b-38fc-405a-b1b5-4f573ac788a6\", \"prefix\":\"CX\"}]\n\n---- cnp-build-image ----\nCONTRACT: CONTAINER\nCOMMAND: cnptools\nSUBCOMMAND: buildimage\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cnp_cnp_robot_registry_de\"}, {\"type\":\"string\", \"id\":\"CNP_QUAY_SIGN_TOKEN_CRED\", \"prefix\":\"QUAYCLI\"}]\n\n---- cnp-deploy-argorollouts ----\nCONTRACT: DEPLOY\nCOMMAND: cnp-deploy-argorollouts.sh\nSUBCOMMAND: deploy\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cnp-nonprod-oc\", \"type\":\"dev\"}, {\"type\":\"usernamePassword\", \"id\":\"cnp-nonprod-oc\", \"type\":\"qa\"}, {\"type\":\"usernamePassword\", \"id\":\"cigna_git_cnp\", \"prefix\":\"GIT\"}, {\"type\":\"string\", \"id\":\"cnp-nonprod-argocd\", \"type\":\"dev\"}, {\"type\":\"string\", \"id\":\"cnp-pa-qa-argocd-token\", \"type\":\"qa\"}]\n\n---- cnp-deploy-argorollouts ----\nCONTRACT: CUTOVER\nCOMMAND: cnp-deploy-argorollouts.sh\nSUBCOMMAND: promote\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-k8s:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cnp-nonprod-oc\", \"type\":\"dev\"}, {\"type\":\"usernamePassword\", \"id\":\"cnp-nonprod-oc\", \"type\":\"qa\"}]\n\n---- cnp-release-xlr ----\nCONTRACT: RELEASE\nCOMMAND: cnp-release-xlr.sh\nSUBCOMMAND: release\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"xlRelease\"}, {\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\", \"prefix\":\"ARTIFACTORY\"}, {\"type\":\"usernamePassword\", \"id\":\"81fbd2fe-c892-472c-9a20-6a327b2960d3\", \"prefix\":\"GIT\"}]\n\n---- cnp-deploy-pcf ----\nCONTRACT: DEPLOY\nCOMMAND: cnp-deploy-pcf.sh\nSUBCOMMAND: deploy\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-pcf:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"CH3PCF04 - Jenkins Space Developer\", \"type\":\"dev\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF01 - Jenkins Space Developer\", \"type\":\"qa\"}, {\"type\":\"usernamePassword\", \"id\":\"PS2PCF02 - Jenkins Space Developer\", \"type\":\"prod-02\"}, {\"type\":\"string\", \"id\":\"NEWRELIC_API_KEY_NONPROD\", \"prefix\":\"NR_NONPROD\"}, {\"type\":\"string\", \"id\":\"NEWRELIC_API_KEY_PROD\", \"prefix\":\"NR_PROD\"}]\n\n---- cnp-deploy-pcf ----\nCONTRACT: CUTOVER\nCOMMAND: cnp-deploy-pcf.sh\nSUBCOMMAND: cutover\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-pcf:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"CH3PCF04 - Jenkins Space Developer\", \"type\":\"dev\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF01 - Jenkins Space Developer\", \"type\":\"qa\"}, {\"type\":\"usernamePassword\", \"id\":\"PS2PCF02 - Jenkins Space Developer\", \"type\":\"prod-02\"}, {\"type\":\"string\", \"id\":\"NEWRELIC_API_KEY_NONPROD\", \"prefix\":\"NR_NONPROD\"}, {\"type\":\"string\", \"id\":\"NEWRELIC_API_KEY_PROD\", \"prefix\":\"NR_PROD\"}]\n\n---- cnp-quality-check-sonarqube ----\nCONTRACT: QUALITY_CHECK\nCOMMAND: cnp-quality-check-sonarqube.sh\nSUBCOMMAND: scan\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-java:latest\nREQUIRED CREDENTIALS:[{\"type\":\"string\", \"id\":\"sonar\", \"prefix\":\"SQ\"}]\n\n---- cnp-preflight-check-git-settings ----\nCONTRACT: PREFLIGHT_CHECK\nCOMMAND: cnp-preflight-check-git-settings.sh\nSUBCOMMAND: \nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"string\", \"id\":\"GIT_TOKEN\"}]\n\n---- cnp-preflight-check-codeowners ----\nCONTRACT: PREFLIGHT_CHECK\nCOMMAND: cnp-preflight-check-codeowners.sh\nSUBCOMMAND: \nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:null\n\n---- cnp-release-xlr ----\nCONTRACT: FINALIZE_RELEASE\nCOMMAND: cnp-release-xlr.sh\nSUBCOMMAND: finalize\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\", \"prefix\":\"AF\"}, {\"type\":\"usernamePassword\", \"id\":\"81fbd2fe-c892-472c-9a20-6a327b2960d3\", \"prefix\":\"GIT\"}]\n\n---- cnp-release-util ----\nCONTRACT: PIPELINE_STATE_WRITER\nCOMMAND: cnp-release-util.sh\nSUBCOMMAND: publish\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\"}]\n\n---- cnp-release-util ----\nCONTRACT: RETRIEVE\nCOMMAND: cnp-release-util.sh\nSUBCOMMAND: retrieve\nDOCKER IMAGE: docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:latest\nREQUIRED CREDENTIALS:[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\"}, {\"type\":\"usernamePassword\", \"id\":\"81fbd2fe-c892-472c-9a20-6a327b2960d3\", \"prefix\":\"GIT\"}]",
+    "artifactoryDockerUrl": "docker-dev.artifactory.express-scripts.com",
+    "buildNumber": "31",
+    "artifactoryRootUrl": "https://artifactory.express-scripts.com/artifactory",
+    "artifactoryDeploymentSnapshotRepo": "ci-snapshot-local",
+    "xlReleaseUrlAPI": "https://10.222.247.63",
+    "buildUrl": "https://cbc.express-scripts.com/t01/job/Cloud%20Native%20Pipeline/job/Functional%20Test%20Apps/job/zz-generated/job/e2e-release-springpcf-all-rnd/job/release%252Ftest-wright/31/",
+    "artifactoryGradleResolverRepo": "esi-maven-virtual",
+    "jobName": "Cloud Native Pipeline/Functional Test Apps/zz-generated/e2e-release-springpcf-all-rnd/release%2Ftest-wright",
+    "buildTool": null,
+    "buildOutputPath": null,
+    "artifactoryMavenSnapshotResolverRepo": "libs-snapshot",
+    "artifactoryMavenReleaseResolverRepo": "libs-release",
+    "workspace": "/home/jenkins/agent/workspace/gpcf-all-rnd_release_test-wright",
+    "artifactoryDockerRegistry": null,
+    "jobRepository": "devops-testapps-SpringPcf",
+    "buildDisplayName": "#31",
+    "artifactoryReleaseRepo": "libs-release-local",
+    "extraDeployFiles": null,
+    "gitRootUrl": null
+  },
+  "executionDateTime": "2022-08-03T21:48:20+0000",
+  "rollbackPackagePath": "ci-release-local/Cloud%20Native%20Pipeline/devops-testapps-SpringPcf/deploymentPackage_devops-testapps-SpringPcf_1.3.42.zip"
+}

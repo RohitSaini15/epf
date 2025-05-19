@@ -1,0 +1,4 @@
+{
+	"commandResult": "FAILURE",
+	"errors": ["error1", "error2"]
+}

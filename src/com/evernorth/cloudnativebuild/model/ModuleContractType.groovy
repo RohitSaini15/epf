@@ -1,0 +1,30 @@
+package com.evernorth.cloudnativebuild.model
+
+enum ModuleContractType {
+    INIT,
+    PREFLIGHT_CHECK,
+    SCM_CHECKOUT,
+    BUILD,
+    CUTOVER,
+    CONTAINER,
+    PACKAGE,
+    PUBLISH,
+    PUBLISH_IMAGE,
+    RETRIEVE,
+    PROVISION,
+    DEPLOY,
+    QUALITY_CHECK,
+    TEST,
+    RELEASE,
+    NOTIFY,
+    FINALIZE_RELEASE,
+    CONFIG,
+    PIPELINE_STATE_WRITER,
+    SECURITY_SCAN,
+    EVENT,
+    SCRIPT,
+    PRERELEASE,
+    APPROVAL,
+    PROMOTE,
+    OTHER
+}

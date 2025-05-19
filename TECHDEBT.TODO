@@ -1,0 +1,8 @@
+TODO / Tech Debt
+
+1. Migrate CNP modules and images to prod quay.
+2. Environment injection - withEnv (TMP, CF_PLUGIN_HOME, etc)
+3. Add polymorphic calls to load via list or named map loadPhases
+4. Tech Debt for GridBuilder injection order for parallel child phases
+5. How to handle scoping pipeline metadata by env or build type, etc
+6. PipelineMetadata CPS implications

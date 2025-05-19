@@ -1,0 +1,6 @@
+{
+  "commandResult":"SUCCESS",
+  "commandOutput": {
+    "publishUrl":["https://artifactory.express-scripts.com/artifactory/libs-snapshot-local/mycndirectory/com/evernorth/azure/functions/fhir-meta-tagger/1.0.0-SNAPSHOT/fhir-meta-tagger-1.0.0-SNAPSHOT.jar","https://artifactory.express-scripts.com/artifactory/libs-snapshot-local/mycndirectory/com/evernorth/azure/functions/fhir-meta-tagger/1.0.0-SNAPSHOT/fhir-meta-tagger.zip"]
+  }
+}

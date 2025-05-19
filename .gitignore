@@ -1,0 +1,89 @@
+# Python bytecode:
+*.py[co]
+
+# Packaging files:
+*.egg*
+
+# Sphinx docs:
+build
+
+# Pytest cache
+.cache
+
+# SQLite3 database files:
+*.db
+
+# SQLite .whl files:
+pysqlite*.whl
+
+# Logs:
+*.log
+
+# Eclipse
+.project
+.pydevproject
+.settings
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+
+# Mac
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Local
+*.ipynb
+.idea/
+*.iml
+
+# gulp/npm/bower
+node_modules
+bower_components
+
+# VS Code
+.vscode
+*.code-workspace
+
+# Groovydoc output
+/output/*
+
+# Groovydoc GMavenPlus
+/target/*
+
+# Java/Groovy
+.classpath
+.factorypath
+
+
+# idea
+*.iml
+.idea/
+/settings.xml
+/settings.xsd
+/src/com/cigna/gdsl
+/pom.xsd
+/test/log
+/test/resources/logback-test.xml
+
+
+# jekyll
+_site
+.sass-cache
+.jekyll-cache
+jekyll-metadata
+vendor
+.jekyll-metadata
+*.zip

@@ -1,0 +1,25 @@
+ .----------------. .----------------. .----------------. .----------------. .----------------. .----------------. .----------------.
+| .--------------. | .--------------. | .--------------. | .--------------. | .--------------. | .--------------. | .--------------. |
+| |              | | |              | | |  _________   | | |   ______     | | |  _________   | | |              | | |              | |
+| |              | | |              | | | |_   ___  |  | | |  |_   __ \   | | | |_   ___  |  | | |              | | |              | |
+| |    ______    | | |    ______    | | |   | |_  \_|  | | |    | |__) |  | | |   | |_  \_|  | | |    ______    | | |    ______    | |
+| |   |______|   | | |   |______|   | | |   |  _|  _   | | |    |  ___/   | | |   |  _|      | | |   |______|   | | |   |______|   | |
+| |              | | |              | | |  _| |___/ |  | | |   _| |_      | | |  _| |_       | | |              | | |              | |
+| |              | | |              | | | |_________|  | | |  |_____|     | | | |_____|      | | |              | | |              | |
+| |              | | |              | | |              | | |              | | |              | | |              | | |              | |
+| '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' |
+ '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------'
+
+******************************************************************************************************************************************
+*                                                        *** COMPLIANCE NOTICE ***                                                       *
+*  Users to specify a Goals file if needed to check their current compliance posture. If not specified the pipeline will create a goals  *
+*  file automatically and add the Pipeline goal. This change will allow for the removal of Production deployment phases if a pipelines   *
+*  compliance posture is invalid. For more information on how to modify your pipeline to allow production deployments, please visit:     *
+*                                   https://github.sys.cigna.com/cigna/adjudicator/wiki/How-to-Use                                       *
+*                                                                                                                                        *
+*                                                         *** VERSION NOTICE ***                                                         *
+*  The EPF team supports the past three major and minor released versions of the shared pipeline. If teams are using an unsupported      *
+*  version it is the teams responsibility to resolve issues. For available supported versions please see:                                *
+*                                    https://github.sys.cigna.com/cigna/enterprise-pipeline-framework/tags                               *
+*                                                                                                                                        *
+******************************************************************************************************************************************

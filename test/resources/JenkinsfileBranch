@@ -1,0 +1,6 @@
+@Library('epf@feature/myfeature') _
+
+def modules = loadModules("mavem")
+cnpNode(modules){
+    build()
+}

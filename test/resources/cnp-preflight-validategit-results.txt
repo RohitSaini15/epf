@@ -1,0 +1,11 @@
+{
+  "commandResult": "SUCCESS",
+  "commandOutput": [
+    {
+      "variable1": "value"
+    },
+    {
+      "variable2": "value2"
+    }
+  ]
+}

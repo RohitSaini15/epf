@@ -1,0 +1,8 @@
+************************************************************************************************************************
+*                                              *** DEPRECATION NOTICE ***                                              *
+*      This method of defining containerMemory has been deprecated in Conduit version 0.15.0 and later. Please         *
+*       utilize the new method of defining it, by ensuring the value of containerMemory is a number instead of         *
+*          a string. This number will be the amount of Mi (MebiBytes) your container will set its limit to.            *
+*                                                                                                                      *
+*               https://pages.github.sys.cigna.com/cigna/Conduit/docs/using-epf/phases/baseline.html               *
+************************************************************************************************************************

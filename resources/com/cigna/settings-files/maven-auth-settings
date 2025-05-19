@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <localRepository>${user.home}/.m2/repository</localRepository>
+  <servers>
+    <server>
+      <id>releases</id>
+      <username>${release-deployer-id}</username>
+      <password>${release-deployer-pwd}</password>
+    </server>
+    <server>
+      <id>snapshots</id>
+      <username>${snapshot-deployer-id}</username>
+      <password>${snapshot-deployer-pwd}</password>
+    </server>
+  </servers>
+  <mirrors>
+    <mirror>
+      <mirrorOf>*,!snapshot-repos,!plugins-release-repos,!plugins-snapshot-repos,!central</mirrorOf>
+      <name>maven-release-repos</name>
+      <url>https://repo.sys.cigna.com/artifactory/maven-release-repos</url>
+      <id>maven-release-repos</id>
+    </mirror>
+    <mirror>
+      <id>central-proxy</id>
+      <name>Local proxy of central repo</name>
+      <url>https://repo.sys.cigna.com/artifactory/libs-release</url>
+      <mirrorOf>central,!snapshot-repos,!plugins-release-repos,!plugins-snapshot-repos</mirrorOf>
+    </mirror>
+  </mirrors>
+  <pluginGroups>
+    <pluginGroup>com.cigna.maven.plugins</pluginGroup>
+  </pluginGroups>
+  <profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>release-repos</id>
+          <name>maven-release-repos</name>
+          <url>https://repo.sys.cigna.com/artifactory/maven-release-repos</url>
+        </repository>
+        <repository>
+          <snapshots />
+          <id>snapshot-repos</id>
+          <name>maven-snapshot-repos</name>
+          <url>https://repo.sys.cigna.com/artifactory/maven-snapshot-repos</url>
+        </repository>
+		<repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>libs-release</name>
+          <url>https://repo.sys.cigna.com/artifactory/libs-release</url>
+        </repository>
+        <repository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>libs-snapshot</name>
+          <url>https://repo.sys.cigna.com/artifactory/libs-snapshot</url>
+        </repository>      </repositories>
+      <pluginRepositories>
+		<pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>plugins-release</name>
+          <url>https://repo.sys.cigna.com/artifactory/plugins-release</url>
+        </pluginRepository>
+        <pluginRepository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>plugins-snapshot</name>
+          <url>https://repo.sys.cigna.com/artifactory/plugins-snapshot</url>
+        </pluginRepository>        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>plugins-release-repos</id>
+          <name>maven-plugin-repos</name>
+          <url>https://repo.sys.cigna.com/artifactory/maven-plugin-repos</url>
+        </pluginRepository>
+        <pluginRepository>
+          <snapshots />
+          <id>plugins-snapshot-repos</id>
+          <name>maven-plugin-repos</name>
+          <url>https://repo.sys.cigna.com/artifactory/maven-plugin-repos</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>artifactory</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>artifactory</activeProfile>
+  </activeProfiles>
+</settings>

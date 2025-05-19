@@ -1,0 +1,9 @@
+************************************************************************************************************************
+*                                              *** DEPRECATION NOTICE ***                                              *
+*      In Conduit version 0.15.0 and later, we have defined a new and improved method of defining phase container      *
+*           overrides. Please take a look at our GitHub Pages Docs to checkout how to use the new properties           *
+*                   'container.cpu', 'container.memory', 'container.image', 'container.version', and                   *
+*                                             'container.imagePullPolicy'.                                             *
+*                                                                                                                      *
+*               https://pages.github.sys.cigna.com/cigna/Conduit/docs/using-epf/phases/baseline.html               *
+************************************************************************************************************************

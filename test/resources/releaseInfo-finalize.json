@@ -1,0 +1,592 @@
+{
+  "artifact": "https://artifactory-dev.express-scripts.com/artifactory/api/npm/npm-local/@esi/finalize/-/@esi/finalize-1.0.5.tgz",
+  "releaseId": "",
+  "steps": [
+    {
+      "buildSchedule": "PRERELEASE_BUILD",
+      "verb": "deploy",
+      "order": 1,
+      "completed": false,
+      "arguments": {
+        "appName": "www-frontend-greetings-cnp",
+        "artifact": "https://artifactory-dev.express-scripts.com/artifactory/api/npm/npm-local/@esi/greetings-ui/-/@esi/greetings-ui-1.0.5.tgz",
+        "awsAccountId": "305171387263",
+        "awsRoleName": "DEPLOYER",
+        "awsUsername": "DAWS-ESI-MEMBERWEB",
+        "deployPath": "esi-memberweb-static-dev-candidate-primary-305171387263/greetings-ui,esi-memberweb-static-dev-candidate-failover-305171387263/greetings-ui",
+        "environment": "dev"
+      },
+      "options": {
+        "env": "Dev",
+        "filter": "cnp-deploy-static-aws"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "buildSchedule": "PRERELEASE_BUILD",
+      "verb": "deploy",
+      "order": 2,
+      "completed": false,
+      "arguments": {
+        "organization": "PipelineAutomation",
+        "foundation": "ch3pcf04",
+        "environment": "development",
+        "appName": "www-frontend-greetings-cnp-dev-candidate",
+        "artifact": "https://artifactory-dev.express-scripts.com/artifactory/api/npm/npm-local/@esi/greetings-ui/-/@esi/greetings-ui-1.0.5.tgz"
+      },
+      "options": {
+        "env": "Dev",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "buildSchedule": "CALLBACK_BUILD",
+      "verb": "cutover",
+      "order": 3,
+      "completed": false,
+      "arguments": {
+        "appName": "www-frontend-greetings-cnp",
+        "awsAccountId": "305171387263",
+        "awsRoleName": "DEPLOYER",
+        "awsUsername": "DAWS-ESI-MEMBERWEB",
+        "sourcePath": "esi-memberweb-static-dev-candidate-primary-305171387263/greetings-ui",
+        "deployPath": "esi-memberweb-static-dev-primary-305171387263/greetings-ui,esi-memberweb-static-dev-failover-305171387263/greetings-ui",
+        "environment": "dev"
+      },
+      "options": {
+        "env": "Dev",
+        "filter": "cnp-deploy-static-aws"
+      },
+      "retryCount": 0,
+      "result": null
+    },
+    {
+      "buildSchedule": "CALLBACK_BUILD",
+      "verb": "cutover",
+      "order": 4,
+      "completed": false,
+      "arguments": {
+        "organization": "PipelineAutomation",
+        "foundation": "ch3pcf04",
+        "environment": "development",
+        "appName": "www-frontend-greetings-cnp-dev-candidate"
+      },
+      "options": {
+        "env": "Dev",
+        "filter": "cnp-deploy-pcf"
+      },
+      "retryCount": 0,
+      "result": null
+    }
+  ],
+  "deploymentPackagePath": "ci-snapshot-local/Cloud%20Native%20Pipeline/greetings-ui/deploymentPackage_greetings-ui-1.0.5.zip",
+  "buildConfiguration": {
+    "debPublicMirror": "https://artifactory-dev.express-scripts.com/artifactory/debian-virtual",
+    "debPrivate": "https://artifactory-dev.express-scripts.com/artifactory/deb-local",
+    "logLevel": "TRACE",
+    "callbackJobBase": "job/DevOps/job/ProductionDeployment/job/CNP/job/XLR%20Callback%20Handler",
+    "dockerDevRegistry": "docker-dev.artifactory-dev.express-scripts.com",
+    "defaultDockerImage": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.0",
+    "enableExternalConfiguration": false,
+    "ignoreConftestAnalysisFailure": false,
+    "dockerRegistry": "docker-dev.artifactory-dev.express-scripts.com",
+    "debVirtual": "debian-virtual",
+    "releaseInfoFileName": "releaseInfo.json",
+    "defaultTerraformImage": "cnp/cnp-docker-aws:latest",
+    "imageRepo": "docker-dev.artifactory.express-scripts.com",
+    "debLocal": "deb-local",
+    "callbackJob": "https://cbc-qa.express-scripts.com/a02test2/job/CSEAUT/job/Cloud%20Native%20Pipeline/job/RND/job/XLR%20Callback%20Handler/",
+    "xlrTemplateUrl": "https://xlrelease-dev.express-scripts.com/api/v1/templates/Applications/templates/Folder08646e98be0b4ff6a1bd61ba33a5241a/Release1fcc85dec72e4d54a7598a987ed313b9/start",
+    "simulateOnly": false,
+    "disableAllTests": false,
+    "defaultK8sImage": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-k8s:latest",
+    "disableAlerts": false,
+    "overrideCommon": true,
+    "defaultNpmImage": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-node14:latest",
+    "deployableBranches": "^develop$,^release.*,^hotfix.*"
+  },
+  "releaseArguments": {
+    "repoUrl": "https://git.express-scripts.com/ExpressScripts/greetings-ui.git",
+    "branchName": "release/rollback-testing",
+    "artifact": "https://artifactory-dev.express-scripts.com/artifactory/api/npm/npm-local/@esi/greetings-ui/-/@esi/greetings-ui-1.0.5.tgz",
+    "commitId": "4281040840dc945a8dd9c3718e5747a03bf9e140\n"
+  },
+  "moduleContractList": [
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "string",
+          "id": "npm-artifactory-id",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": true,
+      "commandName": "cnp-build-npm-create.sh",
+      "unStashName": "source-stash",
+      "contractName": "BUILD",
+      "stageName": null,
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-build-npm-create",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-node14:latest",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "build",
+      "buildStage": "BUILD",
+      "outputDirectory": "target",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-build-npm-create-results.json",
+      "stashName": "artifact-stash"
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-util.sh",
+      "unStashName": "",
+      "contractName": "PIPELINE_STATE_WRITER",
+      "stageName": null,
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-release-util",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1",
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "publish",
+      "buildStage": "",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-release-util-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cbc/artifactory",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-util.sh",
+      "unStashName": "release-stash",
+      "contractName": "RETRIEVE",
+      "stageName": null,
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-release-util",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "retrieve",
+      "buildStage": "",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-release-util-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "cloudnativepipeline",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-jenkins-job-build.sh",
+      "unStashName": "",
+      "contractName": "TEST",
+      "stageName": null,
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-jenkins-job-build",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1",
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "build",
+      "buildStage": "PRE_RELEASE",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-jenkins-job-build-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "env.GIT_CREDENTIAL",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "Dev",
+          "type": "string",
+          "id": "DAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "QA",
+          "type": "string",
+          "id": "TAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "UAT",
+          "type": "string",
+          "id": "TAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-static-aws.sh",
+      "unStashName": "artifact-stash",
+      "contractName": "DEPLOY",
+      "stageName": "AWS",
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-deploy-static-aws",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-aws:latest",
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "deploy",
+      "buildStage": "DEPLOY",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-deploy-static-aws-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "Dev",
+          "type": "string",
+          "id": "DAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "QA",
+          "type": "string",
+          "id": "TAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "UAT",
+          "type": "string",
+          "id": "TAWS-ESI-MEMBERWEB",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-static-aws.sh",
+      "unStashName": "",
+      "contractName": "CUTOVER",
+      "stageName": "AWS",
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-deploy-static-aws",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-aws:latest",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "cutover",
+      "buildStage": "CUTOVER",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-deploy-static-aws-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "env.GIT_CREDENTIAL",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "Dev",
+          "type": "usernamePassword",
+          "id": "CH3PCF04 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "QA",
+          "type": "usernamePassword",
+          "id": "CH3PCF01 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "UAT",
+          "type": "usernamePassword",
+          "id": "CH3PCF05 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-pcf.sh",
+      "unStashName": "source-stash",
+      "contractName": "DEPLOY",
+      "stageName": "PCF",
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-deploy-pcf",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-pcf:latest",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "deploy",
+      "buildStage": "DEPLOY",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-deploy-pcf-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "Dev",
+          "type": "usernamePassword",
+          "id": "CH3PCF04 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "QA",
+          "type": "usernamePassword",
+          "id": "CH3PCF01 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "UAT",
+          "type": "usernamePassword",
+          "id": "CH3PCF05 - Jenkins Space Developer",
+          "scope": "",
+          "prefix": ""
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-deploy-pcf.sh",
+      "unStashName": "",
+      "contractName": "CUTOVER",
+      "stageName": "PCF",
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-deploy-pcf",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-pcf:latest",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "cutover",
+      "buildStage": "CUTOVER",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-deploy-pcf-results.json",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "preExecuteEvent": null,
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "ARTIFACTORY_CREDENTIAL",
+          "scope": "",
+          "prefix": "AF"
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "81fbd2fe-c892-472c-9a20-6a327b2960d3",
+          "scope": "",
+          "prefix": "GIT"
+        }
+      ],
+      "allowPipelineToModifyArgumentList": false,
+      "requests": {
+        "memory": 50
+      },
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-xlr.sh",
+      "unStashName": "",
+      "contractName": "FINALIZE_RELEASE",
+      "stageName": "",
+      "excludesPattern": "",
+      "moduleName": "cnp-release-xlr",
+      "allowNonStandardDeployment": false,
+      "postExecuteEvent": null,
+      "image": "cnp/cnp-docker-core:dev-ov2",
+      "requireCheckout": false,
+      "limits": {
+
+      },
+      "requiresUnStash": false,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "finalize",
+      "buildStage": "",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": [
+
+      ],
+      "logFileName": "cnp-release-xlr-results.json",
+      "preflightSubCommand": "",
+      "stashName": ""
+    },
+    {
+      "releasePackageFileInclusionPattern": "",
+      "credentials": [
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "xlRelease",
+          "scope": "",
+          "prefix": ""
+        },
+        {
+          "env": "",
+          "type": "usernamePassword",
+          "id": "53885b30-878a-42d7-bbfb-09dcf3022279",
+          "scope": "",
+          "prefix": "GIT"
+        }
+      ],
+      "allowPipelineToModifyArgumentList": true,
+      "useLogFile": false,
+      "requiresStash": false,
+      "commandName": "cnp-release-xlr.sh",
+      "unStashName": "source-stash",
+      "contractName": "RELEASE",
+      "stageName": null,
+      "excludesPattern": "**/node_modules/*",
+      "moduleName": "cnp-release-xlr",
+      "allowNonStandardDeployment": false,
+      "image": "docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1",
+      "requiresUnStash": true,
+      "stashPattern": "",
+      "artifactType": "archive",
+      "subCommand": "release",
+      "buildStage": "RELEASE",
+      "outputDirectory": "",
+      "commandPrefix": "",
+      "triggeredByEvent": null,
+      "logFileName": "cnp-release-xlr-results.json",
+      "stashName": ""
+    }
+  ],
+  "buildInfo": {
+    "branchName": "release/rollback-testing",
+    "buildDescription": null,
+    "jenkinsfileDirectory": ".",
+    "buildTargetFile": null,
+    "buildGoals": null,
+    "xlReleaseUrl": null,
+    "gitCredential": null,
+    "xlTemplateName": null,
+    "nodeName": null,
+    "jobUrl": "https://cbc-qa.express-scripts.com/a02test2/job/Cloud%20Native%20Pipeline/job/Functional%20Test%20Apps/job/greetings-ui/job/release%252Frollback-testing/",
+    "commitId": "4281040840dc945a8dd9c3718e5747a03bf9e140\n",
+    "mavenOpts": null,
+    "artifactorySnapshotRepo": "libs-snapshot-local",
+    "commitMessage": null,
+    "artifactoryYumRepo": "yum-local",
+    "buildType": "Cloud Native Modular Build",
+    "buildTag": "jenkins-Cloud Native Pipeline-Functional Test Apps-greetings-ui-release%2Frollback-testing-70",
+    "buildName": "jenkins-Cloud Native Pipeline-Functional Test Apps-greetings-ui-release%2Frollback-testing-70",
+    "artifactoryDeploymentReleaseRepo": "ci-release-local",
+    "commitAuthorName": null,
+    "enterpriseReleaseId": null,
+    "artifactoryCredential": "cbc/artifactory",
+    "npmCredentialsId": null,
+    "cloudNativePipelineModuleConfiguration": "ModuleContract{contractName='BUILD', commandName='cnp-build-npm-create.sh', moduleName='cnp-build-npm-create', subCommand='build', commandPrefix='', credentials=[[{\"type\":\"string\", \"id\":\"npm-artifactory-id\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-node14:latest', buildStage='BUILD', outputDirectory='target', logFileName='cnp-build-npm-create-results.json', useLogFile=false, requiresStash=true, requiresUnStash=true, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='artifact-stash', unStashName='source-stash', stageName='null', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='PIPELINE_STATE_WRITER', commandName='cnp-release-util.sh', moduleName='cnp-release-util', subCommand='publish', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1', buildStage='', outputDirectory='', logFileName='cnp-release-util-results.json', useLogFile=false, requiresStash=false, requiresUnStash=false, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='', stageName='null', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='RETRIEVE', commandName='cnp-release-util.sh', moduleName='cnp-release-util', subCommand='retrieve', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"cbc/artifactory\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1', buildStage='', outputDirectory='', logFileName='cnp-release-util-results.json', useLogFile=false, requiresStash=false, requiresUnStash=true, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='release-stash', stageName='null', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='TEST', commandName='cnp-jenkins-job-build.sh', moduleName='cnp-jenkins-job-build', subCommand='build', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"cloudnativepipeline\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1', buildStage='PRE_RELEASE', outputDirectory='', logFileName='cnp-jenkins-job-build-results.json', useLogFile=false, requiresStash=false, requiresUnStash=false, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='', stageName='null', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='DEPLOY', commandName='cnp-deploy-static-aws.sh', moduleName='cnp-deploy-static-aws', subCommand='deploy', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"env.GIT_CREDENTIAL\"}, {\"type\":\"string\", \"id\":\"DAWS-ESI-MEMBERWEB\", \"type\":\"Dev\"}, {\"type\":\"string\", \"id\":\"TAWS-ESI-MEMBERWEB\", \"type\":\"QA\"}, {\"type\":\"string\", \"id\":\"TAWS-ESI-MEMBERWEB\", \"type\":\"UAT\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-aws:latest', buildStage='DEPLOY', outputDirectory='', logFileName='cnp-deploy-static-aws-results.json', useLogFile=false, requiresStash=false, requiresUnStash=false, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='artifact-stash', stageName='AWS', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='CUTOVER', commandName='cnp-deploy-static-aws.sh', moduleName='cnp-deploy-static-aws', subCommand='cutover', commandPrefix='', credentials=[[{\"type\":\"string\", \"id\":\"DAWS-ESI-MEMBERWEB\", \"type\":\"Dev\"}, {\"type\":\"string\", \"id\":\"TAWS-ESI-MEMBERWEB\", \"type\":\"QA\"}, {\"type\":\"string\", \"id\":\"TAWS-ESI-MEMBERWEB\", \"type\":\"UAT\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-aws:latest', buildStage='CUTOVER', outputDirectory='', logFileName='cnp-deploy-static-aws-results.json', useLogFile=false, requiresStash=false, requiresUnStash=true, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='', stageName='AWS', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='DEPLOY', commandName='cnp-deploy-pcf.sh', moduleName='cnp-deploy-pcf', subCommand='deploy', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"env.GIT_CREDENTIAL\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF04 - Jenkins Space Developer\", \"type\":\"Dev\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF01 - Jenkins Space Developer\", \"type\":\"QA\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF05 - Jenkins Space Developer\", \"type\":\"UAT\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-pcf:latest', buildStage='DEPLOY', outputDirectory='', logFileName='cnp-deploy-pcf-results.json', useLogFile=false, requiresStash=false, requiresUnStash=true, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='source-stash', stageName='PCF', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='CUTOVER', commandName='cnp-deploy-pcf.sh', moduleName='cnp-deploy-pcf', subCommand='cutover', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"CH3PCF04 - Jenkins Space Developer\", \"type\":\"Dev\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF01 - Jenkins Space Developer\", \"type\":\"QA\"}, {\"type\":\"usernamePassword\", \"id\":\"CH3PCF05 - Jenkins Space Developer\", \"type\":\"UAT\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-pcf:latest', buildStage='CUTOVER', outputDirectory='', logFileName='cnp-deploy-pcf-results.json', useLogFile=false, requiresStash=false, requiresUnStash=true, allowPipelineToModifyArgumentList=false, stashPattern='', stashName='', unStashName='', stageName='PCF', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}ModuleContract{contractName='RELEASE', commandName='cnp-release-xlr.sh', moduleName='cnp-release-xlr', subCommand='release', commandPrefix='', credentials=[[{\"type\":\"usernamePassword\", \"id\":\"xlRelease\"}, {\"type\":\"usernamePassword\", \"id\":\"53885b30-878a-42d7-bbfb-09dcf3022279\", \"prefix\":\"GIT\"}]], image='docker-dev.artifactory-dev.express-scripts.com/cnp/cnp-docker-core:0.3.1', buildStage='RELEASE', outputDirectory='', logFileName='cnp-release-xlr-results.json', useLogFile=false, requiresStash=false, requiresUnStash=true, allowPipelineToModifyArgumentList=true, stashPattern='', stashName='', unStashName='source-stash', stageName='null', allowNonStandardDeployment=false, triggeredByEvent=null, releasePackageFileInclusionPattern='', artifactType='archive'}",
+    "artifactoryDockerUrl": "docker-dev.artifactory-dev.express-scripts.com",
+    "buildNumber": "70",
+    "artifactoryRootUrl": "https://artifactory-dev.express-scripts.com/artifactory",
+    "artifactoryDeploymentSnapshotRepo": "ci-snapshot-local",
+    "xlReleaseUrlAPI": "https://10.222.216.239",
+    "buildUrl": "https://cbc-qa.express-scripts.com/a02test2/job/Cloud%20Native%20Pipeline/job/Functional%20Test%20Apps/job/greetings-ui/job/release%252Frollback-testing/70/",
+    "artifactoryGradleResolverRepo": "esi-maven-virtual",
+    "jobName": "Cloud Native Pipeline/Functional Test Apps/greetings-ui/release%2Frollback-testing",
+    "buildTool": null,
+    "buildOutputPath": null,
+    "artifactoryMavenSnapshotResolverRepo": "libs-snapshot",
+    "artifactoryMavenReleaseResolverRepo": "libs-release",
+    "workspace": "/home/jenkins/agent/workspace/ings-ui_release_rollback-testing",
+    "artifactoryDockerRegistry": null,
+    "jobRepository": "greetings-ui",
+    "buildDisplayName": "#70",
+    "artifactoryReleaseRepo": "libs-release-local",
+    "extraDeployFiles": null,
+    "gitRootUrl": null
+  },
+  "executionDateTime": "2021-08-25T15:06:13+0000",
+  "rollbackPackagePath": "ci-release-local/Cloud%20Native%20Pipeline/greetings-ui/deploymentPackage_greetings-ui-1.0.4.zip"
+}

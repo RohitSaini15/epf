@@ -1,0 +1,37 @@
+@Library('epf@hotfix/CSEAUT-1715-callback') _
+
+env.CNP_LOG_LEVEL="TRACE"
+env.CNP_ENABLE_EVENTS="true"
+env.CNP_OVERRIDE_COMMON="false"
+env.CNP_DEFAULT_INIT_IMAGE="docker-dev.artifactory.express-scripts.com/cnptest/cnp-docker-init:1.0.0"
+env.CNP_SIMULATE_ONLY="false"
+env.IMAGE_VALIDATION_ENABLED="true"
+env.CNP_CANDIDATE_JOB="job/Cloud%20Native%20Pipeline/job/integration_tests/job/mockDevOps/job/candidate/"
+env.CNP_CALLBACK_JOB="job/Cloud%20Native%20Pipeline/job/integration_tests/job/mockDevOps/job/candidate/"
+
+String coreImage="docker-dev.artifactory.express-scripts.com/cnptest/cnp-docker-fake:0.0.6"
+String coreImage2="docker-dev.artifactory.express-scripts.com/cnp/cnp-docker-core:0.4.13"
+env.CNP_DEFAULT_DOCKER_IMAGE=coreImage2
+def modules  = [
+        [contractName: "BUILD",  commandName:"cnp-build-fake.sh", image: coreImage],
+        [contractName: "DEPLOY",  commandName:"cnp-deploy-fake.sh",  image: coreImage, credentials:[[id:"env.foobar", env:"prod"]]],
+        [contractName: "CUTOVER",  commandName:"cnp-cutover-fake.sh", image: coreImage],
+]
+
+cnpNode (modules) {
+    checkoutFromScm()
+    def buildResult  = build()
+
+    deploy([deploymentMarkersEnabled:false, appName:"devops-testapps-SpringPcf-dev", artifact:buildResult.commandOutput.publishUrl],["env":"dev"])
+
+    preRelease {
+        deploy([deploymentMarkersEnabled: true, appName: "devops-testapps-SpringPcf-dev", artifact: myVal, custom: myVal2], ["env": "dev"])
+    }
+
+    awaitApproval([message:"Do you want to release?", scope:"release"])
+
+    release {
+        cutover(["arg1": "value1", "arg2": "value2"], ["env": "dev"])
+    }
+
+}

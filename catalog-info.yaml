@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: enterprise-pipeline-framework
+  title: Enterprise Pipeline Framework
+  description: The Enterprise Pipeline Framework is the Cigna Enterprise Pipeline Library
+  links:
+    - url: https://confluence.sys.cigna.com/display/DvOp/Enterprise+Pipeline+Framework+%28EPF%29+-+Official
+      title: Enterprise Pipeline Framework Official Documentation
+      icon: web
+  # labels:
+  #   example.com/custom: custom_label_value
+  annotations:
+    github.com/project-slug: cigna/enterprise-pipeline-framework
+    sonarqube.org/project-key: enterprise-pipeline-framework
+    jenkins.io/job-full-name: https://orchestrator20.orchestrator-v2.sys.cigna.com/job/orchestrators-folders/job/epf/job/epf/
+    # backstage.io/techdocs-ref: dir:.
+  tags:
+    - groovy
+spec:
+  type: library
+  lifecycle: production
+  owner: g_devops_platform
+  system: ba18522

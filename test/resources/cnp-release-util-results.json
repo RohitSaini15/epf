@@ -1,0 +1,6 @@
+{
+  "commandResult":"SUCCESS",
+  "commandOutput": {
+    "publishUrl": "https://artifactory.express-scripts.com/artifactory/libs-snapshot-local/mycndirectory/com/esrx/devops-testapps-SpringPcf/1.3.6-SNAPSHOT/devops-testapps-SpringPcf-1.3.6.jar"
+  }
+}
