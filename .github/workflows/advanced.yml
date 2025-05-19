@@ -1,0 +1,247 @@
+name: Enterprise Pipeline Framework (Advanced)
+
+on:
+  push:
+    branches: [ main, release/*, hotfix/* ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+env:
+  CNP_LOG_LEVEL: TRACE
+  CNP_OVERRIDE_COMMON: 'true'
+  ARTIFACTORY_ROOT_URL: https://cigna.jfrog.io/artifactory
+
+jobs:
+  compile:
+    name: Compile Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Compile
+        run: mvn -q -B compile -DskipTests
+      
+      - name: Upload workspace
+        uses: actions/upload-artifact@v3
+        with:
+          name: workspace
+          path: |
+            .
+            !.git
+            !target
+          retention-days: 1
+
+  precheck-pom-version:
+    name: Precheck POM Version
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Run Precheck
+        env:
+          GIT_URL: ${{ github.event.repository.html_url }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_USER: ${{ github.actor }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./Tag-and-Release-CI.sh precheck
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: compile
+    strategy:
+      matrix:
+        test-type: [unit, integration]
+        java-version: ['11', '17']
+      fail-fast: false
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Run Unit Tests
+        if: matrix.test-type == 'unit'
+        run: mvn -B test
+      
+      - name: Run Integration Tests
+        if: matrix.test-type == 'integration'
+        run: mvn -B verify -DskipUnitTests
+      
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.test-type }}-java${{ matrix.java-version }}
+          path: target/surefire-reports/
+          retention-days: 7
+      
+      - name: Upload JaCoCo Report
+        if: success() && github.ref == 'refs/heads/main' && matrix.test-type == 'unit' && matrix.java-version == '11'
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+          retention-days: 7
+
+  quality-scans:
+    name: Quality Scans
+    runs-on: ubuntu-latest
+    needs: compile
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: SonarQube Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=enterprise-pipeline-framework \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      
+      - name: Checkmarx Scan
+        uses: checkmarx/ast-github-action@v2
+        with:
+          project_name: enterprise-pipeline-framework
+          cx_tenant: ${{ secrets.CHECKMARX_TENANT }}
+          cx_client_id: ${{ secrets.CHECKMARX_CLIENT_ID }}
+          cx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
+          additional_params: --threshold "HIGH=0" --exclude-folders "test,target"
+
+  tag-and-release:
+    name: Tag and Release
+    runs-on: ubuntu-latest
+    needs: [tests, quality-scans]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up Git
+        run: |
+          git config user.email "DevOpsSystems@Cigna.com"
+          git config user.name "DevOpsSystems"
+      
+      - name: Tag and Release
+        env:
+          GIT_URL: ${{ github.event.repository.html_url }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_USER: ${{ github.actor }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./Tag-and-Release-CI.sh release
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION_FROM_POM }}
+          name: Release ${{ env.VERSION_FROM_POM }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'dev' }}
+    runs-on: ubuntu-latest
+    needs: [tag-and-release]
+    if: |
+      (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
+      github.event_name == 'workflow_dispatch'
+    environment:
+      name: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Get version from POM
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      
+      - name: Deploy to Artifactory
+        run: |
+          mvn deploy \
+            -DskipTests \
+            -DaltDeploymentRepository=artifactory::default::${{ env.ARTIFACTORY_ROOT_URL }}/libs-release-local
+        env:
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      
+      - name: Create ServiceNow Change Request
+        if: github.event.inputs.environment == 'prod'
+        run: |
+          echo "Creating ServiceNow Change Request for production deployment"
+          # This would be replaced with actual API call to ServiceNow
+          # curl -X POST https://servicenow.cigna.com/api/change_request \
+          #   -H "Authorization: Bearer ${{ secrets.SERVICENOW_TOKEN }}" \
+          #   -H "Content-Type: application/json" \
+          #   -d '{"title":"SCT0000142","cmdb_ci":"Enterprise Pipeline Framework","requested_by":"ei0733","assigned_to":"ei0733"}'
+      
+      - name: Send Notification
+        run: |
+          echo "Deployment to ${{ github.event.inputs.environment || 'dev' }} completed successfully"
+          # This would be replaced with actual notification mechanism
+          # curl -X POST https://webex.api.cigna.com/v1/messages \
+          #   -H "Authorization: Bearer ${{ secrets.WEBEX_TOKEN }}" \
+          #   -H "Content-Type: application/json" \
+          #   -d '{"roomId":"bd7cdcb0-27a4-11ed-af92-f5afe966fcf4","text":"Deployment to ${{ github.event.inputs.environment || 'dev' }} completed successfully"}'

@@ -1,0 +1,217 @@
+name: Reusable Enterprise Pipeline Framework
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'Java version to use'
+        required: false
+        default: '11'
+        type: string
+      maven-goals:
+        description: 'Maven goals to run'
+        required: false
+        default: 'verify'
+        type: string
+      sonar-project-key:
+        description: 'SonarQube project key'
+        required: true
+        type: string
+      checkmarx-project-name:
+        description: 'Checkmarx project name'
+        required: true
+        type: string
+      deploy-environment:
+        description: 'Environment to deploy to'
+        required: false
+        default: 'dev'
+        type: string
+      run-release:
+        description: 'Whether to run the release process'
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
+      CHECKMARX_TENANT:
+        required: true
+      CHECKMARX_CLIENT_ID:
+        required: true
+      CHECKMARX_CLIENT_SECRET:
+        required: true
+      ARTIFACTORY_USERNAME:
+        required: false
+      ARTIFACTORY_PASSWORD:
+        required: false
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Set up JDK ${{ inputs.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Build and Test
+        run: mvn -B ${{ inputs.maven-goals }}
+      
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: target/surefire-reports/
+          retention-days: 7
+      
+      - name: Upload JaCoCo Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+          retention-days: 7
+      
+      - name: Upload workspace
+        uses: actions/upload-artifact@v3
+        with:
+          name: workspace
+          path: |
+            .
+            !.git
+            !target
+          retention-days: 1
+
+  quality-scans:
+    name: Quality Scans
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up JDK ${{ inputs.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: SonarQube Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=${{ inputs.sonar-project-key }} \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      
+      - name: Checkmarx Scan
+        uses: checkmarx/ast-github-action@v2
+        with:
+          project_name: ${{ inputs.checkmarx-project-name }}
+          cx_tenant: ${{ secrets.CHECKMARX_TENANT }}
+          cx_client_id: ${{ secrets.CHECKMARX_CLIENT_ID }}
+          cx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
+          additional_params: --threshold "HIGH=0" --exclude-folders "test,target"
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build-and-test, quality-scans]
+    if: inputs.run-release == true
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up Git
+        run: |
+          git config user.email "DevOpsSystems@Cigna.com"
+          git config user.name "DevOpsSystems"
+      
+      - name: Get version from POM
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      
+      - name: Tag and Release
+        env:
+          GIT_URL: ${{ github.event.repository.html_url }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_USER: ${{ github.actor }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f "./Tag-and-Release-CI.sh" ]; then
+            ./Tag-and-Release-CI.sh release
+          else
+            echo "No release script found, creating tag manually"
+            git tag -a "v$VERSION" -m "Release $VERSION"
+            git push origin "v$VERSION"
+          fi
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy to ${{ inputs.deploy-environment }}
+    runs-on: ubuntu-latest
+    needs: [quality-scans]
+    if: inputs.deploy-environment != ''
+    environment:
+      name: ${{ inputs.deploy-environment }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+          path: .
+      
+      - name: Set up JDK ${{ inputs.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Get version from POM
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      
+      - name: Deploy to Artifactory
+        if: inputs.deploy-environment == 'prod' && secrets.ARTIFACTORY_USERNAME != ''
+        run: |
+          mvn deploy \
+            -DskipTests \
+            -DaltDeploymentRepository=artifactory::default::https://cigna.jfrog.io/artifactory/libs-release-local
+        env:
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      
+      - name: Send Notification
+        run: |
+          echo "Deployment to ${{ inputs.deploy-environment }} completed successfully"
